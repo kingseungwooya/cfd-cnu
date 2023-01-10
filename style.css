@@ -7,9 +7,9 @@
   }
 
   .container .item {
-    background-color: #9cdce2;
     border: 1px solid black;
-    aspect-ratio: 1;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     
   }

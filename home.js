@@ -14,31 +14,35 @@ var gridXY;
 var runBt = document.getElementById("executeBt");
 var randomArray =  
 runBt.addEventListener("click", function() {
-    var xn = document.getElementById("xn");
-    var yn = document.getElementById("yn");
+    var xn = document.getElementById("xn").value;
+    var yn = document.getElementById("yn").value;
 
     let dividedWidth = defaultHeight / xn;
     let dividedHeight = defaultHeight / yn;
-
+    console.log("1");
     // create nx ny array 
-    gridXY = Array(nx).fill().map(() => Array(ny));
-
+    gridXY = Array(xn).fill().map(() => Array(yn));
+    var gridPrefix = "repeat(";
+    var gridPostfix = ",1fr)" 
     var grid = document.getElementById("gridBox");
-    grid.style.grid-template-c
+    grid.style.gridTemplate = 
+        gridPrefix + xn + gridPostfix +" / " 
+        + gridPrefix + yn + gridPostfix + ";";
+    console.log("2");
 
     for ( var i = 0; i < yn; i++ ) {
         for ( var j = 0; j < xn; j++ ) {
-            var itemOfGrid = gridXY[i][j];
+            //var itemOfGrid = gridXY[i][j];
 
             let cell = new Cell( randomGenerator(),dividedWidth, dividedHeight);
-
+           // gridXY[i][j] = (cell);
             var item = document.createElement("div");
             item.className = 'item';
             item.style.backgroundColor = cell['color'];
-            
-
-
-
+            var text = document.createTextNode(cell['weight']);
+            item.appendChild(text);
+            grid.appendChild(item);
+            console.log("3");
         }
     }
     
