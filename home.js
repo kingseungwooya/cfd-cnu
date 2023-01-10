@@ -1,12 +1,12 @@
-const defaultWidth = 1;
-const defaultHeight = 1;
+const defaultWidth = 500;
+const defaultHeight = 500;
 
 const colorConfig = {
-    red : [0.0, 0.2],
-    orange :[0.2, 0.4],
-    yellow : [0.4, 0.6],
-    green : [0.6, 0.8],
-    blue : [0.8, 1.0]
+    'red' : [0.0, 0.2],
+    'orange' :[0.2, 0.4],
+    'yellow' : [0.4, 0.6],
+    'green' : [0.6, 0.8],
+    'blue' : [0.8, 1.0]
 }
 
 var gridXY;
@@ -19,17 +19,29 @@ runBt.addEventListener("click", function() {
 
     let dividedWidth = defaultHeight / xn;
     let dividedHeight = defaultHeight / yn;
-    console.log("1");
+
+
+
     // create nx ny array 
     gridXY = Array(xn).fill().map(() => Array(yn));
-    var gridPrefix = "repeat(";
-    var gridPostfix = ",1fr)" 
-    var grid = document.getElementById("gridBox");
-    grid.style.gridTemplate = 
-        gridPrefix + xn + gridPostfix +" / " 
-        + gridPrefix + yn + gridPostfix + ";";
-    console.log("2");
 
+    document.documentElement.style.setProperty("--columns", xn);
+    document.documentElement.style.setProperty("--width", dividedWidth + "px");
+    document.documentElement.style.setProperty("--rows", yn);
+    document.documentElement.style.setProperty("--height", dividedHeight + "px");
+
+
+    var gridPrefix = "repeat(";
+    var gridPostfix = ", 1fr);" 
+    var grid = document.getElementById("gridBox");
+    
+ 
+    grid.style.gridTemplateColumns = gridPrefix + xn + gridPostfix;
+    grid.style.gridTemplateRows = gridPrefix + yn + gridPostfix;
+        
+
+    grid.innerHTML = "";
+    
     for ( var i = 0; i < yn; i++ ) {
         for ( var j = 0; j < xn; j++ ) {
             //var itemOfGrid = gridXY[i][j];
@@ -38,11 +50,12 @@ runBt.addEventListener("click", function() {
            // gridXY[i][j] = (cell);
             var item = document.createElement("div");
             item.className = 'item';
+           
             item.style.backgroundColor = cell['color'];
             var text = document.createTextNode(cell['weight']);
-            item.appendChild(text);
+            //item.appendChild(text);
+            
             grid.appendChild(item);
-            console.log("3");
         }
     }
     
@@ -51,13 +64,19 @@ runBt.addEventListener("click", function() {
 
 // 0 ~ 1 사잇값 
 function randomGenerator() {
-    return Math.random();
+    return Math.random().toFixed(1);
 } 
 function getColorByRandomNumber(weight) {
-    for(var [key, value] in colorConfig) {
-        var min = value[0];
-        var max = value[1];
-        if ( min<= weight < max) {
+    console.log(weight);
+    for(key in colorConfig) {
+        
+        var min = colorConfig[key][0];
+        var max = colorConfig[key][1];
+        
+        console.log(key);
+        if ( min < weight <= max) {
+            //console.log(weight);
+            //console.log(key);
             return key;
         }
     }
