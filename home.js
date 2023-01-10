@@ -43,11 +43,12 @@ runBt.addEventListener("click", function() {
     grid.innerHTML = "";
     
     for ( var i = 0; i < yn; i++ ) {
+        gridXY[i] = new Array();
         for ( var j = 0; j < xn; j++ ) {
             //var itemOfGrid = gridXY[i][j];
 
             let cell = new Cell( randomGenerator(),dividedWidth, dividedHeight);
-           // gridXY[i][j] = (cell);
+            gridXY[i][j] = cell;
             var item = document.createElement("div");
             item.className = 'item';
            
@@ -59,21 +60,20 @@ runBt.addEventListener("click", function() {
         }
     }
     
-     
+     console.log(gridXY);
 })
 
 // 0 ~ 1 사잇값 
 function randomGenerator() {
     return Math.random().toFixed(1);
 } 
+
 function getColorByRandomNumber(weight) {
-    console.log(weight);
     for(key in colorConfig) {
         
         var min = colorConfig[key][0];
         var max = colorConfig[key][1];
         
-        console.log(key);
         if ( min < weight <= max) {
             //console.log(weight);
             //console.log(key);
