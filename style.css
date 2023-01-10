@@ -1,0 +1,15 @@
+.container {
+    display: grid;
+    width: 100px;
+    height: 100px;
+    
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .container .item {
+    background-color: #9cdce2;
+    border: 1px solid black;
+    aspect-ratio: 1;
+    text-align: center;
+    
+  }
