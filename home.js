@@ -51,8 +51,10 @@ runBt.addEventListener("click", function() {
             gridXY[i][j] = cell;
             var item = document.createElement("div");
             item.className = 'item';
-           
+
             item.style.backgroundColor = cell['color'];
+            
+            
             var text = document.createTextNode(cell['weight']);
             //item.appendChild(text);
             
@@ -65,22 +67,16 @@ runBt.addEventListener("click", function() {
 
 // 0 ~ 1 사잇값 
 function randomGenerator() {
-    return Math.random().toFixed(1);
+    return Math.random().toFixed(5);
 } 
 
-function getColorByRandomNumber(weight) {
-    for(key in colorConfig) {
-        
-        var min = colorConfig[key][0];
-        var max = colorConfig[key][1];
-        
-        if ( min < weight <= max) {
-            //console.log(weight);
-            //console.log(key);
-            return key;
-        }
-    }
-    
+
+function getRGBByWeight(weight) {
+    let blueWeight = (255 * ( 1 - weight )).toFixed(5);
+    let redWeight = (255 * weight).toFixed(5);
+    let rgb = `rgb(${redWeight}, 0, ${blueWeight})`;
+    console.log(rgb);
+    return rgb;
 }
 
 class Cell {
@@ -88,6 +84,6 @@ class Cell {
         this.weight = weight;
         this.width = width;
         this.height = height;
-        this.color = getColorByRandomNumber(weight);
+        this.color = getRGBByWeight(weight);
     }
 }
