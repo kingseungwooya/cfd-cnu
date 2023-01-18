@@ -50,19 +50,18 @@ runBt.addEventListener("click", function() {
     // 계수의 배열 
 
     let coefficientMatrix = [];
-    let rowCount = 0;
 
-    for ( var i = 1; i <= yn; i++ ) {
+
+    for ( var i = 0; i < yn; i++ ) {
         gridXY[i] = new Array();
-        for ( var j = 1; j <= xn; j++ ) {
-            coefficientMatrix[rowCount] = new Array();
+        for ( var j = 0; j < xn; j++ ) {
+
             
             var weight = 0.0;
             if(i == yn/2 && j == xn/2) {
                 weight = 100.0;   
             }
-            coefficientMatrix[rowCount] = getCoefficientArray(i, j, xn, yn);
-            rowCount++;
+            coefficientMatrix.push(getCoefficientArray(i, j, xn, yn));
             /*
             var omega = getOmegaByWeight() 
             let cell = new Cell( weight ,dividedWidth, dividedHeight, omega);
@@ -78,7 +77,7 @@ runBt.addEventListener("click", function() {
         }
     }
     
-     console.log( coefficientMatrix); 
+     console.log("coefficientMatrix is : " + coefficientMatrix); 
 })
 
 // 0 ~ 1 사잇값 
@@ -181,9 +180,9 @@ function getDeterminant(matrix, n) {
 function getCoefficientArray(piI, piJ, nx, ny) {
     
     
-    //gridXY[j+1][i] - 4*gridXY[j][i] + gridXY[j-1][i] + gridXY[j][i+1] + gridXY[j][i-1] = 0;
+    gridXY[j+1][i] - 4*gridXY[j][i] + gridXY[j-1][i] + gridXY[j][i+1] + gridXY[j][i-1] = 0;
     let row = [];
-    for (let j = 1; j <= ny; j++) {
+    for (let j = 1; j <= ny; i++) {
         
         for (let i = 1; i <= nx; i++) {
             if( i == piI && j == piJ) {
