@@ -1,8 +1,5 @@
 export function getColorByPi(inputPi, min, max) {
     var pi = Number(inputPi);
-    console.log(pi);
-    console.log(min);
-    console.log(max);
 
   if (pi < 0) {
     var red = (pi - min) * (255 / (max - min));
