@@ -1,6 +1,6 @@
 import { getCoefficientArray, gaussianElimination } from './logic/equation.js';
 import { getColorByPi } from './logic/RGBCalculator.js';
-import { jacobi } from './iter_method/iterativeMethod.js';
+import { jacobi, SOR } from './iter_method/iterativeMethod.js';
 
 const defaultWidth = 500;
 const defaultHeight = 500;
@@ -10,7 +10,9 @@ const defaultHeight = 500;
 // 1e-6 or 1e-8.
 const epsilon = 0.000001;
 // 1000 or 10000
-const maxIter = 1000;
+const maxIter = 100;
+// 1 ~ 2
+const omega = 1.25;
 // x0 set to 0,0 ..... xn * yn 만큼
 let x0;
 
@@ -70,8 +72,9 @@ runBt.addEventListener("click", function () {
 
   // 결과 값 
   // let result = gaussianElimination(coefficientMatrix, valueArray);
-  let result = jacobi(coefficientMatrix, valueArray, x0, maxIter, epsilon); 
-
+  //let result = jacobi(coefficientMatrix, valueArray, x0, maxIter, epsilon); 
+  let result = SOR(coefficientMatrix, valueArray, x0, maxIter, epsilon, omega); 
+  console.log(result);
   // 결과 내 최대 최소 값 구하기 
   minOfPis = Math.min(...result);
   maxOfPis = Math.max(...result);
