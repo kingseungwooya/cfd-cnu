@@ -59,18 +59,19 @@ runBt.addEventListener("click", function () {
 
   let result = gaussianElimination(coefficientMatrix, valueArray);
   console.log(result);
-  minOfOmega = Math.min(result);
-  maxOfOmega = Math.max(result);
+  minOfOmega = Math.min(...result);
+  maxOfOmega = Math.max(...result);
 
   let count = 0;
-  for (row = 0; row < xn; row++) {
-    for (col = 0; col < yn; col++) {
+  for (var row = 0; row < xn; row++) {
+    for (var col = 0; col < yn; col++) {
       var pi = result[count];
       var color = getColorByPi(pi, minOfOmega, maxOfOmega);
+      console.log(color);
       var item = document.createElement("div");
       item.className = "item";
 
-      item.style.backgroundColor = color;
+      item.style.backgroundColor = color.toString();
       grid.appendChild(item);
       count++;
     }
