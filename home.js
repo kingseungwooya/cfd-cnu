@@ -1,8 +1,18 @@
 import { getCoefficientArray, gaussianElimination } from './logic/equation.js';
 import { getColorByPi } from './logic/RGBCalculator.js';
+import { jacobi } from './iter_method/iterativeMethod.js';
 
 const defaultWidth = 500;
 const defaultHeight = 500;
+
+// iterative method constant value
+
+// 1e-6 or 1e-8.
+const epsilon = 0.000001;
+// 1000 or 10000
+const maxIter = 1000;
+// x0 set to 0,0 ..... xn * yn 만큼
+let x0;
 
 var gridXY;
 
@@ -16,7 +26,8 @@ runBt.addEventListener("click", function () {
 
   let dividedWidth = defaultWidth / xn;
   let dividedHeight = defaultHeight / yn;
-
+  x0 = Array(xn * yn)
+    .fill(0);
   gridXY = Array(xn)
     .fill()
     .map(() => Array(yn));
@@ -57,7 +68,8 @@ runBt.addEventListener("click", function () {
     }
   }
 
-  let result = gaussianElimination(coefficientMatrix, valueArray);
+  // let result = gaussianElimination(coefficientMatrix, valueArray);
+  let result = jacobi(coefficientMatrix, valueArray, x0, maxIter, epsilon); 
   console.log(result);
   minOfOmega = Math.min(...result);
   maxOfOmega = Math.max(...result);
