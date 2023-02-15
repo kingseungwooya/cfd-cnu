@@ -6,14 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CNU-CFD</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
 </head>
 <body>
     <div class="body">
-        <h1>CFD Tutor</h1>
-        <input type="text" id = "xn"> <br>
-        <input type="text" id = "yn"> <br>
-        <button id = "executeBt">Run</button>
-        <div class="container" id = "gridBox">
+        <h1 class="align-middle">CFD Tutor</h1>
+        <aside id="left-sidebar">
+            <br>
+            <div class="x_input">
+                <label for="xn">Xn</label>
+                <input type="text" id = "xn" autofocus> <br>
+            </div>
+            <div class="y_input">
+                <label for="yn">Yn</label>
+                <input type="text" id = "yn"> <br>
+            </div>
+            <button id = "executeBt">Run</button>
+        </aside>
+        
+        <aside id="right-sidebar" style="text-align: center;">
+            <div class="resultBox" style="text-align: center;">
+                <div class="container" id = "gridBox"></div>
+            </div>
+        </aside>
+
+        
             
         </div>
     </div>
