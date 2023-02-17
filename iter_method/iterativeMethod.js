@@ -1,93 +1,34 @@
-export function jacobi(A, b, x0, maxIter, epsilon) {
-
-    let n = A.length;
-    let x = x0.slice(); // initialize x with the initial guess
-    let diag = Array(n);
-    for (let i = 0; i < n; i++) {
-        diag[i] = A[i][i];
+export function laplacianSOR(nx, ny, tol, omega, b, maxIter) {
+    // Initialize the solution matrix x and set all values to 0
+    const x = [];
+    for (let i = 0; i < ny; i++) {
+      const temp = [];
+      for (let j = 0; j < nx; j++) {
+        temp.push(0);
+      }
+      x.push(temp);
     }
-
-    for (let iter = 0; iter < maxIter; iter++) {
-        let x_prev = x.slice();
-        for (let i = 0; i < n; i++) {
-            x[i] = b[i];
-            for (let j = 0; j < n; j++) {
-                if (j != i) {
-                    x[i] -= A[i][j] * x_prev[j];
-                }
-            }
-            x[i] /= diag[i];
+    // 최대 반복 횟수 정의 및 반복 카운터 초기화
+    let iter = 0;
+  
+    // 오차를 허용 오차(tol)보다 큰 값으로 초기화
+    let error = 1;
+  
+    // 오류가 허용 오차보다 작거나 최대 반복 횟수에 도달할 때까지 계속 반복
+    while (error > tol && iter < maxIter) {
+      error = 0;
+  
+      // SOR을 적용하여 x matrix UPdate
+      for (let i = 1; i < ny - 1; i++) {
+        for (let j = 1; j < nx - 1; j++) {
+          const temp = x[i][j];
+          x[i][j] = (1 - omega) * x[i][j] + omega * (x[i - 1][j] + x[i + 1][j] + x[i][j - 1] + x[i][j + 1] - b[i][j]) / 4.0;
+          error += Math.abs(x[i][j] - temp);
         }
-
-        let norm = 0;
-        for (let i = 0; i < n; i++) {
-            norm += (x[i] - x_prev[i]) * (x[i] - x_prev[i]);
-        }
-        norm = Math.sqrt(norm);
-
-        if (norm < epsilon) {
-            return x;
-        }
-    }
-    return x;
-}
-
-
-export function gaussSeidel(A, b, x0, maxIter, epsilon) {
-    let n = A.length;
-    let x = x0.slice(); // initialize x with the initial guess
-    for (let iter = 0; iter < maxIter; iter++) {
-        let x_prev = x.slice();
-        for (let i = 0; i < n; i++) {
-            x[i] = b[i];
-            for (let j = 0; j < i; j++) {
-                x[i] -= A[i][j] * x[j];
-            }
-            for (let j = i+1; j < n; j++) {
-                x[i] -= A[i][j] * x_prev[j];
-            }
-            x[i] /= A[i][i];
-        }
-
-        let norm = 0;
-        for (let i = 0; i < n; i++) {
-            norm += (x[i] - x_prev[i]) * (x[i] - x_prev[i]);
-        }
-        norm = Math.sqrt(norm);
-
-        if (norm < epsilon) {
-            return x;
-        }
+      }
+  
+      iter++;
     }
     return x;
-}
-
-
-export function SOR(A, b, x0, maxIter, epsilon, omega) {
-    let n = A.length;
-    let x = x0.slice(); // initialize x with the initial guess
-    for (let iter = 0; iter < maxIter; iter++) {
-        let x_prev = x.slice();
-        for (let i = 0; i < n; i++) {
-            x[i] = b[i];
-            for (let j = 0; j < i; j++) {
-                x[i] -= A[i][j] * x[j];
-            }
-            for (let j = i+1; j < n; j++) {
-                x[i] -= A[i][j] * x_prev[j];
-            }
-            x[i] = (1 - omega) * x_prev[i] + omega * (x[i] / A[i][i]);
-        }
-
-        let norm = 0;
-        for (let i = 0; i < n; i++) {
-            norm += (x[i] - x_prev[i]) * (x[i] - x_prev[i]);
-        }
-        norm = Math.sqrt(norm);
-
-        if (norm < epsilon) {
-            return x;
-        }
-    }
-    return x;
-}
+  }
+  

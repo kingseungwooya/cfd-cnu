@@ -1,6 +1,5 @@
-import { getCoefficientArray, gaussianElimination } from './logic/equation.js';
 import { getColorByPi } from './logic/RGBCalculator.js';
-import { jacobi, SOR } from './iter_method/iterativeMethod.js';
+import { laplacianSOR } from './iter_method/iterativeMethod.js';
 
 const defaultWidth = 500;
 const defaultHeight = 500;
@@ -8,16 +7,12 @@ const defaultHeight = 500;
 // iterative method constant value
 
 // 1e-6 or 1e-8.
-const epsilon = 0.000001;
+const epsilon = 0.001;
 // 1000 or 10000
-const maxIter = 100;
+const maxIter = 1000;
 // 1 ~ 2
-const omega = 1.25;
-// x0 set to 0,0 ..... xn * yn 만큼
-let x0;
-
-var gridXY;
-
+const omega = 1.5;
+// 
 var minOfPis;
 var maxOfPis;
 
@@ -28,11 +23,6 @@ runBt.addEventListener("click", function () {
 
   let dividedWidth = defaultWidth / xn;
   let dividedHeight = defaultHeight / yn;
-  x0 = Array(xn * yn)
-    .fill(0);
-  gridXY = Array(xn)
-    .fill()
-    .map(() => Array(yn));
 
   document.documentElement.style.setProperty("--columns", xn);
   document.documentElement.style.setProperty("--width", dividedWidth + "px");
@@ -47,60 +37,44 @@ runBt.addEventListener("click", function () {
   grid.style.gridTemplateRows = gridPrefix + yn + gridPostfix;
 
   grid.innerHTML = "";
-  // 값의 배열(b) 초기화
-  let valueCount = xn * yn;
-  let valueArray = new Array(valueCount).fill(0);
+ 
 
-  // 계수 행렬 초기화
-  let coefficientMatrix = [];
-  let rowCount = 0;
-
-  for (var i = 1; i <= yn; i++) {
-    gridXY[i] = new Array();
-    for (var j = 1; j <= xn; j++) {
-      // 계수행렬 구하기
-      coefficientMatrix[rowCount] = new Array();
-      coefficientMatrix[rowCount] = getCoefficientArray(j, i, xn, yn);
-
-      // 값 배열 구하기
-      if (j == Math.ceil(yn / 2) && i == Math.ceil(xn / 2)) {
-        valueArray[rowCount] = 100; // 중간값은 100으로 value 생성
-      }
-      rowCount++;
-    }
-  }
-
-  // 결과 값 
-  // let result = gaussianElimination(coefficientMatrix, valueArray);
-  //let result = jacobi(coefficientMatrix, valueArray, x0, maxIter, epsilon); 
-  let result = SOR(coefficientMatrix, valueArray, x0, maxIter, epsilon, omega); 
-  console.log(result);
+   // Initialize the b matrix with a single point source
+   const b = [];
+   for (let i = 0; i < yn; i++) {
+     const temp = [];
+     for (let j = 0; j < xn; j++) {
+       if (j === Math.floor(xn / 2) && i === Math.floor(yn / 2)) {
+         temp.push(100);
+       } else {
+         temp.push(0);
+       }
+     }
+     b.push(temp);
+   }
+  let startTime = new Date();
+  let result = laplacianSOR(xn, yn,epsilon, omega, b, maxIter);
+  let endTime = new Date();
+  console.log(endTime - startTime);
   // 결과 내 최대 최소 값 구하기 
-  minOfPis = Math.min(...result);
-  maxOfPis = Math.max(...result);
+
+  maxOfPis = result.reduce((acc, curr) => Math.max(acc, ...curr), Number.NEGATIVE_INFINITY);
+  minOfPis =  result.reduce((acc, curr) => Math.min(acc, ...curr), Number.POSITIVE_INFINITY);
+  console.log(`Maximum value: ${maxOfPis}`); // Maximum value: 9
+  console.log(`Minimum value: ${minOfPis}`); // Minimum value: 1
 
   // 각 cell에 색깔 입력 
-  let count = 0;
-  for (var row = 0; row < xn; row++) {
-    for (var col = 0; col < yn; col++) {
-      var pi = result[count];
+  for (var i = 0; i < yn; i++) {
+    for (var j = 0; j < xn; j++) {
+      var pi = result[i][j];
       var color = getColorByPi(pi, minOfPis, maxOfPis);
       var item = document.createElement("div");
       item.className = "item";
 
       item.style.backgroundColor = color.toString();
       grid.appendChild(item);
-      count++;
     }
   }
 });
 
-class Cell {
-  constructor(weight, width, height, omega) {
-    this.weight = weight;
-    this.width = width;
-    this.height = height;
-    this.omega = omega;
-    this.color = getColorByOmega(omega);
-  }
-}
+
